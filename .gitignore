@@ -1,0 +1,22 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+.terraform.lock.hcl
+
+# Ansible
+*.retry
+inventory/dev.yml
+
+# Secrets - never commit these
+*.pem
+id_ed25519*
+*.key
+
+# OS/editor cruft
+.DS_Store
+.vscode/
