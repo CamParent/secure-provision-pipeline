@@ -1,0 +1,20 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Include SSH hardening tasks
+  ansible.builtin.import_tasks: ssh.yml
+
+- name: Include firewall tasks
+  ansible.builtin.import_tasks: firewall.yml
+  when: hardening_ufw_enabled
+
+- name: Include fail2ban tasks
+  ansible.builtin.import_tasks: fail2ban.yml
+  when: hardening_fail2ban_enabled
+
+- name: Include unattended-upgrades tasks
+  ansible.builtin.import_tasks: unattended_upgrades.yml
+  when: hardening_unattended_upgrades_enabled

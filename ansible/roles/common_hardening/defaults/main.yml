@@ -1,0 +1,20 @@
+---
+# Variables here are the "factory settings" for this role - every one can
+# be overridden per-host or per-group in ansible/group_vars/ without
+# touching this file.
+
+hardening_ssh_permit_root_login: "no"
+hardening_ssh_password_auth: "no"
+hardening_ssh_port: 22
+
+hardening_ufw_enabled: true
+hardening_ufw_default_incoming: "deny"
+hardening_ufw_default_outgoing: "allow"
+hardening_ufw_allowed_ports:
+  - "{{ hardening_ssh_port }}"
+
+hardening_unattended_upgrades_enabled: true
+
+hardening_fail2ban_enabled: true
+hardening_fail2ban_bantime: 3600
+hardening_fail2ban_maxretry: 5
