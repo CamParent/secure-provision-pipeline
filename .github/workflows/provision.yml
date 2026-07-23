@@ -58,8 +58,8 @@ jobs:
       - name: Write SSH private key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_spp
-          chmod 600 ~/.ssh/id_ed25519_spp
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_ci
+          chmod 600 ~/.ssh/id_ed25519_ci
 
       - name: Terraform init
         run: terraform init
@@ -78,7 +78,7 @@ jobs:
 
       - name: Clean up SSH key
         if: always()
-        run: rm -f ~/.ssh/id_ed25519_spp
+        run: rm -f ~/.ssh/id_ed25519_ci
 
   ansible-configure:
     name: Ansible configure
@@ -97,8 +97,8 @@ jobs:
       - name: Write SSH private key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_spp
-          chmod 600 ~/.ssh/id_ed25519_spp
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_ci
+          chmod 600 ~/.ssh/id_ed25519_ci
 
       - name: Wait for VMs to be SSH-reachable
         run: |
@@ -114,4 +114,4 @@ jobs:
 
       - name: Clean up SSH key
         if: always()
-        run: rm -f ~/.ssh/id_ed25519_spp
+        run: rm -f ~/.ssh/id_ed25519_ci

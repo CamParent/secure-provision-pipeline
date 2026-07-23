@@ -41,7 +41,8 @@ resource "proxmox_virtual_environment_vm" "this" {
     }
 
     user_account {
-      keys = [var.ssh_public_key]
+      username = "ansible"
+      keys     = [var.ssh_public_key]
     }
   }
 
@@ -53,7 +54,7 @@ resource "proxmox_virtual_environment_vm" "this" {
       type        = "ssh"
       host        = split("/", var.ip_address)[0]
       user        = "ansible"
-      private_key = file(pathexpand("~/.ssh/id_ed25519_spp"))
+      private_key = file(pathexpand("~/.ssh/id_ed25519_ci"))
     }
   }
 }
