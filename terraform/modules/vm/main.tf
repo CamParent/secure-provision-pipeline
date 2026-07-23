@@ -48,7 +48,9 @@ resource "proxmox_virtual_environment_vm" "this" {
 
   # Ensures cloud-init has finished before Ansible tries to connect
   provisioner "remote-exec" {
-    inline = ["cloud-init status --wait"]
+    inline = [
+      "cloud-init status --wait; code=$?; if [ \"$code\" -eq 1 ]; then exit 1; fi; exit 0"
+    ]
 
     connection {
       type        = "ssh"
