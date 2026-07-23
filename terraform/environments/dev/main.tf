@@ -6,6 +6,7 @@ module "bastion01" {
   source = "../../modules/vm"
 
   vm_name        = "bastion01"
+  vmid           = 201
   template_name  = "ubuntu-2404-cloudinit-template"
   cores          = 1
   memory         = 1024
@@ -19,6 +20,7 @@ module "web01" {
   source = "../../modules/vm"
 
   vm_name        = "web01"
+  vmid           = 202
   template_name  = "ubuntu-2404-cloudinit-template"
   cores          = 2
   memory         = 2048
@@ -32,6 +34,7 @@ module "db01" {
   source = "../../modules/vm"
 
   vm_name        = "db01"
+  vmid           = 203
   template_name  = "ubuntu-2404-cloudinit-template"
   cores          = 2
   memory         = 4096
