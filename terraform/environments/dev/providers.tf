@@ -12,15 +12,14 @@ terraform {
     }
   }
 
-  # Remote state backend - create this storage account/container first with:
-  #   az group create -n tfstate-rg -l eastus
-  #   az storage account create -n <uniquestorageacct> -g tfstate-rg -l eastus --sku Standard_LRS
-  #   az storage container create -n secure-provision-pipeline --account-name <uniquestorageacct>
+  # Remote state backend in Azure Storage (created 2026-07-23).
+  # Auth is via ARM_ACCESS_KEY env var (set from GitHub secret in CI) -
+  # the storage account key itself is never written here or committed.
   backend "azurerm" {
     resource_group_name  = "tfstate-rg"
-    storage_account_name = "" # fill in - keep out of source control, pass via -backend-config
-    container_name        = "secure-provision-pipeline"
-    key                    = "dev.terraform.tfstate"
+    storage_account_name = "camsppstate2026"
+    container_name       = "secure-provision-pipeline"
+    key                   = "dev.terraform.tfstate"
   }
 }
 
