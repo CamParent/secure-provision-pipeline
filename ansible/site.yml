@@ -1,0 +1,8 @@
+---
+- name: Apply baseline security hardening to all pipeline VMs
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - common_hardening
