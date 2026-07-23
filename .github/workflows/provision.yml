@@ -1,0 +1,97 @@
+name: Provision and Configure
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  security-scan:
+    name: Security scanning
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: terraform/environments/dev
+          soft_fail: false
+
+      - name: Run checkov
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: terraform/
+          soft_fail: false
+
+      - name: Install ansible-lint
+        run: pip install --break-system-packages ansible-lint
+
+      - name: Run ansible-lint
+        run: ansible-lint ansible/site.yml
+
+  terraform-apply:
+    name: Terraform apply
+    runs-on: self-hosted
+    needs: security-scan
+    defaults:
+      run:
+        working-directory: terraform/environments/dev
+    env:
+      TF_VAR_proxmox_endpoint: ${{ secrets.PROXMOX_ENDPOINT }}
+      TF_VAR_proxmox_api_token: ${{ secrets.PROXMOX_API_TOKEN }}
+      TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform apply
+        run: terraform apply -auto-approve tfplan
+
+      - name: Upload generated inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: ansible-inventory
+          path: ansible/inventory/dev.yml
+
+  ansible-configure:
+    name: Ansible configure
+    runs-on: self-hosted
+    needs: terraform-apply
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download generated inventory
+        uses: actions/download-artifact@v4
+        with:
+          name: ansible-inventory
+          path: ansible/inventory
+
+      - name: Write SSH private key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_spp
+          chmod 600 ~/.ssh/id_ed25519_spp
+
+      - name: Wait for VMs to be SSH-reachable
+        run: |
+          for host in 192.168.1.60 192.168.1.61 192.168.1.62; do
+            timeout 120 bash -c "until nc -z $host 22; do sleep 5; done"
+          done
+
+      - name: Run ansible-playbook
+        run: ansible-playbook ansible/site.yml
+
+      - name: Clean up SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519_spp
