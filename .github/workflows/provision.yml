@@ -33,6 +33,9 @@ jobs:
           /tmp/lint-venv/bin/pip install --upgrade pip
           /tmp/lint-venv/bin/pip install ansible-lint
 
+      - name: Install Ansible Galaxy collections
+        run: /tmp/lint-venv/bin/ansible-galaxy collection install -r ansible/requirements.yml
+
       - name: Run ansible-lint
         run: /tmp/lint-venv/bin/ansible-lint ansible/site.yml
 
@@ -91,6 +94,9 @@ jobs:
           for host in 192.168.1.60 192.168.1.61 192.168.1.62; do
             timeout 120 bash -c "until nc -z $host 22; do sleep 5; done"
           done
+
+      - name: Install Ansible Galaxy collections
+        run: ansible-galaxy collection install -r ansible/requirements.yml
 
       - name: Run ansible-playbook
         run: ansible-playbook ansible/site.yml

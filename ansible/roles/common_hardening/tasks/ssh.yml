@@ -3,7 +3,7 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^#?PermitRootLogin"
-    line: "PermitRootLogin {{ hardening_ssh_permit_root_login }}"
+    line: "PermitRootLogin {{ common_hardening_ssh_permit_root_login }}"
     validate: "sshd -t -f %s"
   notify: Restart sshd
 
@@ -11,7 +11,7 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^#?PasswordAuthentication"
-    line: "PasswordAuthentication {{ hardening_ssh_password_auth }}"
+    line: "PasswordAuthentication {{ common_hardening_ssh_password_auth }}"
     validate: "sshd -t -f %s"
   notify: Restart sshd
 
@@ -19,6 +19,6 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^#?Port"
-    line: "Port {{ hardening_ssh_port }}"
+    line: "Port {{ common_hardening_ssh_port }}"
     validate: "sshd -t -f %s"
   notify: Restart sshd

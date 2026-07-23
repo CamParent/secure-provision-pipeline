@@ -9,12 +9,12 @@
 
 - name: Include firewall tasks
   ansible.builtin.import_tasks: firewall.yml
-  when: hardening_ufw_enabled
+  when: common_hardening_ufw_enabled
 
 - name: Include fail2ban tasks
   ansible.builtin.import_tasks: fail2ban.yml
-  when: hardening_fail2ban_enabled
+  when: common_hardening_fail2ban_enabled
 
 - name: Include unattended-upgrades tasks
   ansible.builtin.import_tasks: unattended_upgrades.yml
-  when: hardening_unattended_upgrades_enabled
+  when: common_hardening_unattended_upgrades_enabled

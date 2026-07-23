@@ -4,6 +4,6 @@
 # now - see README "Future work"). Once network segmentation is in place,
 # this should be tightened to only the web tier's source IP instead of
 # open to the whole subnet.
-hardening_ufw_allowed_ports:
-  - "{{ hardening_ssh_port }}"
+common_hardening_ufw_allowed_ports:
+  - "{{ common_hardening_ssh_port }}"
   - 5432

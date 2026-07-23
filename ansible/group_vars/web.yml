@@ -1,7 +1,7 @@
 ---
 # web01 needs standard web traffic ports in addition to the SSH baseline
 # from common_hardening's defaults.
-hardening_ufw_allowed_ports:
-  - "{{ hardening_ssh_port }}"
+common_hardening_ufw_allowed_ports:
+  - "{{ common_hardening_ssh_port }}"
   - 80
   - 443

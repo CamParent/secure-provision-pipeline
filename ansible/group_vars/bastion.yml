@@ -2,5 +2,5 @@
 # bastion01 is the only host meant to be reached from outside the lab
 # subnet's trusted range, so it stays locked to SSH only - no app or
 # db ports get added here.
-hardening_ufw_allowed_ports:
-  - "{{ hardening_ssh_port }}"
+common_hardening_ufw_allowed_ports:
+  - "{{ common_hardening_ssh_port }}"
